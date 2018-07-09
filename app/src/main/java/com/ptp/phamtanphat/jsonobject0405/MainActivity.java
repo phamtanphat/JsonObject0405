@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         btnReadJson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo4.json");
+                new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo3.json");
             }
         });
     }
@@ -47,21 +48,29 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            try {
-                JSONArray jsonArray = new JSONArray(s);
-                for (int i = 0 ; i < jsonArray.length() ; i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String khoahoc = jsonObject.getString("khoahoc");
-                    Log.d("BBB",khoahoc);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Xulyjson(s,"vn");
             super.onPostExecute(s);
         }
     }
+    private void Xulyjson(String s , String tukhoa) {
+        try {
+            JSONObject jsonObject = new JSONObject(s);
+            JSONObject jsonObjectlanguage = jsonObject.getJSONObject("language");
 
+            JSONObject jsonObjectKhoahoc = jsonObjectlanguage.getJSONObject(tukhoa);
+            String name = jsonObjectKhoahoc.getString("name");
+            String address = jsonObjectKhoahoc.getString("address");
+            String course1 = jsonObjectKhoahoc.getString("course1");
+            String course2 = jsonObjectKhoahoc.getString("course2");
+            String course3 = jsonObjectKhoahoc.getString("course3");
+
+            Log.d("BBB",name + course3);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
     private String docNoiDung_Tu_URL(String theUrl) {
         StringBuilder content = new StringBuilder();
         try {
