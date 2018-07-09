@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ import java.net.URLConnection;
 public class MainActivity extends AppCompatActivity {
 
     Button btnReadJson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +32,12 @@ public class MainActivity extends AppCompatActivity {
         btnReadJson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo1.json");
+                new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo2.json");
             }
         });
     }
-    class ReadJson extends AsyncTask<String,Void,String>{
+
+    class ReadJson extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -46,17 +49,21 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             try {
                 JSONObject jsonObject = new JSONObject(s);
-                String noihoc = jsonObject.getString("noihoc");
-                Log.d("BBB",noihoc);
+                JSONArray jsonArray = jsonObject.getJSONArray("danhsach");
+                JSONObject jsonObjectkhoahoc = jsonArray.getJSONObject(0);
+
+                String khoahoc = jsonObjectkhoahoc.getString("khoahoc");
+                Log.d("BBB",khoahoc);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             super.onPostExecute(s);
         }
     }
-    private String docNoiDung_Tu_URL(String theUrl){
+
+    private String docNoiDung_Tu_URL(String theUrl) {
         StringBuilder content = new StringBuilder();
-        try    {
+        try {
             // create a url object
             URL url = new URL(theUrl);
 
@@ -69,12 +76,11 @@ public class MainActivity extends AppCompatActivity {
             String line;
 
             // read from the urlconnection via the bufferedreader
-            while ((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 content.append(line + "\n");
             }
             bufferedReader.close();
-        }
-        catch(Exception e)    {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return content.toString();
