@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -41,7 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("BBB",s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                String noihoc = jsonObject.getString("noihoc");
+                Log.d("BBB",noihoc);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             super.onPostExecute(s);
         }
     }
