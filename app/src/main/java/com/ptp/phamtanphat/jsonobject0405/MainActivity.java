@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         btnReadJson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo2.json");
+                new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo4.json");
             }
         });
     }
@@ -48,12 +48,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             try {
-                JSONObject jsonObject = new JSONObject(s);
-                JSONArray jsonArray = jsonObject.getJSONArray("danhsach");
-                JSONObject jsonObjectkhoahoc = jsonArray.getJSONObject(0);
+                JSONArray jsonArray = new JSONArray(s);
+                for (int i = 0 ; i < jsonArray.length() ; i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String khoahoc = jsonObject.getString("khoahoc");
+                    Log.d("BBB",khoahoc);
+                }
 
-                String khoahoc = jsonObjectkhoahoc.getString("khoahoc");
-                Log.d("BBB",khoahoc);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
