@@ -1,9 +1,17 @@
 package com.ptp.phamtanphat.jsonobject0405;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,12 +23,26 @@ public class MainActivity extends AppCompatActivity {
 
         //https://khoapham.vn/KhoaPhamTraining/json/tien/demo1.json
         btnReadJson = findViewById(R.id.buttonReadJson);
+
+        btnReadJson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo1.json");
+            }
+        });
     }
     class ReadJson extends AsyncTask<String,Void,String>{
 
         @Override
         protected String doInBackground(String... strings) {
-            return null;
+            String ketqua = docNoiDung_Tu_URL(strings[0]);
+            return ketqua;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("BBB",s);
+            super.onPostExecute(s);
         }
     }
     private String docNoiDung_Tu_URL(String theUrl){
