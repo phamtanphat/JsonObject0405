@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         btnReadJson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo3.json");
+                new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo5.json");
             }
         });
     }
@@ -48,29 +48,24 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            Xulyjson(s,"vn");
+            try {
+                JSONArray jsonArray = new JSONArray(s);
+                for (int i = 0 ; i < jsonArray.length() ; i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String khoahoc = jsonObject.optString("khoaho");
+                    String hinhanh = jsonObject.optString("hinhanh");
+                    Log.d("BBB","Khoa hoc " + khoahoc);
+                    Log.d("BBB","Hinh anh " + hinhanh);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             super.onPostExecute(s);
         }
     }
-    private void Xulyjson(String s , String tukhoa) {
-        try {
-            JSONObject jsonObject = new JSONObject(s);
-            JSONObject jsonObjectlanguage = jsonObject.getJSONObject("language");
 
-            JSONObject jsonObjectKhoahoc = jsonObjectlanguage.getJSONObject(tukhoa);
-            String name = jsonObjectKhoahoc.getString("name");
-            String address = jsonObjectKhoahoc.getString("address");
-            String course1 = jsonObjectKhoahoc.getString("course1");
-            String course2 = jsonObjectKhoahoc.getString("course2");
-            String course3 = jsonObjectKhoahoc.getString("course3");
-
-            Log.d("BBB",name + course3);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-    }
     private String docNoiDung_Tu_URL(String theUrl) {
         StringBuilder content = new StringBuilder();
         try {
