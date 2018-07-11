@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +24,7 @@ import java.net.URLConnection;
 public class MainActivity extends AppCompatActivity {
 
     Button btnReadJson;
-
+    ImageView img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,13 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
         //https://khoapham.vn/KhoaPhamTraining/json/tien/demo1.json
         btnReadJson = findViewById(R.id.buttonReadJson);
-
+        img = findViewById(R.id.imageview);
         btnReadJson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new ReadJson().execute("https://khoapham.vn/KhoaPhamTraining/json/tien/demo5.json");
             }
         });
+
     }
 
     class ReadJson extends AsyncTask<String, Void, String> {
@@ -52,10 +56,12 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray jsonArray = new JSONArray(s);
                 for (int i = 0 ; i < jsonArray.length() ; i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String khoahoc = jsonObject.optString("khoaho");
+                    if (jsonObject.has("khoaho")){
+                        String khoahoc = jsonObject.optString("khoahoc");
+                        Log.d("BBB","Khoa hoc " + khoahoc);
+                    }
                     String hinhanh = jsonObject.optString("hinhanh");
-                    Log.d("BBB","Khoa hoc " + khoahoc);
-                    Log.d("BBB","Hinh anh " + hinhanh);
+                    Picasso.get().load(hinhanh).into(img);
                 }
 
             } catch (JSONException e) {
